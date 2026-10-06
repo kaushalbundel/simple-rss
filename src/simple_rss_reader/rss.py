@@ -56,6 +56,7 @@ def get_entries_from_url(feed_url: str, num_entries: int = 3):
     feed = feedparser.parse(feed_url)
 
     feed_title = feed.feed.title
+    print("\n" + "*" * 30 + "New feed" + "*" * 30 + "\n")
     print(f"Feed Title: {feed_title}")
 
     for feed_entries in feed.entries[:num_entries]:
