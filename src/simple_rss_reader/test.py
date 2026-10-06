@@ -1,6 +1,7 @@
 import feedparser
-from rich import print
 import nh3
+from rich import print
+from simple_rss_reader.opml_parse import opml_parser
 
 # d = feedparser.parse("https://travelsofsamwise.substack.com/feed")
 
@@ -18,33 +19,7 @@ import nh3
 
 
 # print(d.entries[0].content[0].value)  # the printed image is not readable.
-
-
 # create a function that prints the last 5 feed and related information
-def main(feed_url: str, num_entries: int = 5):
-    feed = feedparser.parse(feed_url)
-
-    feed_title = feed.feed.title
-    print(f"Feed Title: {feed_title}")
-
-    for feed_entries in feed.entries[:num_entries]:
-        print("\n" + "=" * 60)
-
-        if not feed_entries:
-            print("No entries found")
-            break
-
-        entry_title = feed_entries.title
-        entry_desc = feed_entries.description
-        entry_link = feed_entries.link
-        entry_content = sanitize_html(feed_entries.content[0].value)
-
-        print(f"Blog Title: {entry_title} \n")
-        print(f"Blog Link: {entry_link} \n")
-        print(f"Blog Description: {entry_desc} \n")
-        print(f"Blog content: {entry_content} \n")
-
-    print("All entries shown successfully")
 
 
 def sanitize_html(html_string: str):
@@ -74,5 +49,46 @@ def sanitize_html(html_string: str):
     return cleaned_html
 
 
+# TODO: Some entries have entry content on the description block whereas others have on entry content. Try manage.
+# TODO When the related fields are not found the entire script is crashing. Like for eg: with content block not available the script is failing. Build a fail safe mechenism
+def get_entries_from_url(feed_url: str, num_entries: int = 3):
+    """RSS information extraction using single url"""
+    feed = feedparser.parse(feed_url)
+
+    feed_title = feed.feed.title
+    print(f"Feed Title: {feed_title}")
+
+    for feed_entries in feed.entries[:num_entries]:
+        print("\n" + "=" * 60)
+
+        if not feed_entries:
+            print("No entries found")
+            continue
+
+        entry_title = feed_entries.title
+        entry_desc = feed_entries.description
+        entry_link = feed_entries.link
+        # entry_content = sanitize_html(feed_entries.content[0].value)
+
+        print(f"Blog Title: {entry_title} \n")
+        print(f"Blog Link: {entry_link} \n")
+        print(f"Blog Description: {entry_desc} \n")
+        # print(f"Blog content: {entry_content} \n")
+
+
+def get_entries_from_opml(opml_file_path: str):
+    """RSS information extraction using opml file"""
+    opml_links = opml_parser(opml_file_path)
+    for link in opml_links:
+        get_entries_from_url(feed_url=link, num_entries=3)
+    print("All entries shown successfully")
+
+
+def main():
+    get_entries_from_opml(
+        "/Users/kaushalbundel/02-projects/python-projects/simple-rss/Subscriptions-OnMyMac.opml"
+    )
+
+
 if __name__ == "__main__":
-    main(feed_url="https://travelsofsamwise.substack.com/feed")
+    main()
