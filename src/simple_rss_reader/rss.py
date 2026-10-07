@@ -49,8 +49,6 @@ def sanitize_html(html_string: str):
     return cleaned_html
 
 
-# TODO: Some entries have entry content on the description block whereas others have on entry content. Try manage.
-# TODO When the related fields are not found the entire script is crashing. Like for eg: with content block not available the script is failing. Build a fail safe mechenism
 def get_entries_from_url(feed_url: str, num_entries: int = 3):
     """RSS information extraction using single url"""
     feed = feedparser.parse(feed_url)
@@ -69,7 +67,6 @@ def get_entries_from_url(feed_url: str, num_entries: int = 3):
         entry_title = feed_entries.get("title", "Title Not Available")
         entry_desc = feed_entries.get("description", "Description Not Available")
         entry_link = feed_entries.get("link", "Link Not Available")
-        # entry_content = sanitize_html(feed_entries.content[0].value)
         entry_content = feed_entries.get("content")
         # validating entry content
         if entry_content:
