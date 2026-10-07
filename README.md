@@ -9,6 +9,6 @@
   - ~Reading a single rss link~
   - ~Populating posts related to the link~
   - ~Reading posts for one single link~
-- OPML Integration
+- ~OPML Integration~
 - Better UI/UX
 - AI Integration?
