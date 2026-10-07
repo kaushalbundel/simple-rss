@@ -11,4 +11,7 @@
   - ~Reading posts for one single link~
 - ~OPML Integration~
 - Better UI/UX
+  - OPML Link is hard coded. It should be selectable
+  - Showing Entry description or content on the basis of availability
+  - Simple UI
 - AI Integration?
